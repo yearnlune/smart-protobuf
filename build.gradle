@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group 'lab.yearnlune'
+version '1.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('com.google.protobuf:protobuf-java:3.14.0')
+
+    implementation('org.slf4j:slf4j-api:1.7.30')
+
+    compileOnly('org.projectlombok:lombok:1.18.20')
+    annotationProcessor('org.projectlombok:lombok:1.18.20')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+}
+
+Properties properties = new Properties()
+File propFile = project.rootProject.file(System.properties['user.home'] + "/local.properties")
+if (propFile.exists()) {
+    properties.load(propFile.newDataInputStream())
+}else{
+    properties.put("artifactory.username", System.getenv("ARTIFACTORY_USERNAME"))
+    properties.put("artifactory.password", System.getenv("ARTIFACTORY_PASSWORD"))
+}

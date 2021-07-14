@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package lab.yearnlune.smart.protobuf;
+option java_package = "lab.yearnlune.smart.protobuf";
+option java_outer_classname = "Smart";
+
+message Scalar {
+  double doubleValue = 1;
+  float floatValue = 2;
+  int32 int32Value = 3;
+  int64 int64Value = 4;
+  uint32 uint32Value = 5;
+  uint64 uint64Value = 6;
+  sint32 sint32Value = 7;
+  sint64 sint64Value = 8;
+  fixed32 fixed32Value = 9;
+  fixed64 fixed64Value = 10;
+  sfixed32 sfixed32Value = 11;
+  sfixed64 sfixed64Value = 12;
+  bool boolValue = 13;
+  string stringValue = 14;
+  bytes bytesValue = 15;
+}
+
