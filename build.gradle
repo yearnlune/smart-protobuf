@@ -1,4 +1,17 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.16'
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
@@ -39,4 +52,22 @@ if (propFile.exists()) {
 }else{
     properties.put("artifactory.username", System.getenv("ARTIFACTORY_USERNAME"))
     properties.put("artifactory.password", System.getenv("ARTIFACTORY_PASSWORD"))
+}
+
+sourceSets {
+    test {
+        proto {
+            srcDir 'src/test/java/proto'
+        }
+        java {
+            srcDir 'build/classes/java/test/'
+            srcDir 'build/generated/source/proto/test/java'
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.14.0'
+    }
 }

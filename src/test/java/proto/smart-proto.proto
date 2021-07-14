@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lab.yearnlune.smart.protobuf;
 option java_package = "lab.yearnlune.smart.protobuf";
-option java_outer_classname = "Smart";
+option java_outer_classname = "ExampleProto";
 
 message Scalar {
   double doubleValue = 1;
