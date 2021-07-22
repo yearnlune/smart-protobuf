@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package lab.yearnlune.smart.protobuf;
+option java_package = "lab.yearnlune.smart.protobuf";
+option java_outer_classname = "ExampleProto";
+
+message Scalar {
+  double doubleValue = 1;
+  float floatValue = 2;
+  int32 int32Value = 3;
+  int64 int64Value = 4;
+  uint32 uint32Value = 5;
+  uint64 uint64Value = 6;
+  sint32 sint32Value = 7;
+  sint64 sint64Value = 8;
+  fixed32 fixed32Value = 9;
+  fixed64 fixed64Value = 10;
+  sfixed32 sfixed32Value = 11;
+  sfixed64 sfixed64Value = 12;
+  bool boolValue = 13;
+  string stringValue = 14;
+  bytes bytesValue = 15;
+}
+
+message Collection {
+  repeated double doubleValues = 1;
+  repeated float floatValues = 2;
+  repeated int32 int32Values = 3;
+  repeated int64 int64Values = 4;
+  repeated uint32 uint32Values = 5;
+  repeated uint64 uint64Values = 6;
+  repeated sint32 sint32Values = 7;
+  repeated sint64 sint64Values = 8;
+  repeated fixed32 fixed32Values = 9;
+  repeated fixed64 fixed64Values = 10;
+  repeated sfixed32 sfixed32Values = 11;
+  repeated sfixed64 sfixed64Values = 12;
+  repeated bool boolValues = 13;
+  repeated string stringValues = 14;
+  repeated bytes bytesValues = 15;
+}
+
+message Object {
+  Scalar scalar = 1;
+  Collection collection = 2;
+  NestedObject nestedObject = 3;
+
+  message NestedObject {
+    Scalar scalar = 1;
+    Collection collection = 2;
+  }
+}

@@ -61,4 +61,52 @@ public class SmartProtobufTest {
         assertThat(scalar.getStringValue(), is(stringValue));
         assertThat(scalar.getBytesValue(), is(bytesValue));
     }
+
+    @Test
+    public void getValueSafely_scalarNullValue_shouldBeSetDefaultValue() {
+        /* GIVEN */
+        Double doubleValue = null;
+        Float  floatValue = null;
+        Integer int32Value = null;
+        Long int64Value = null;
+        Boolean boolValue = null;
+        String stringValue = null;
+        ByteString byteStringValue = null;
+
+        /* WHEN */
+        ExampleProto.Scalar scalar = ExampleProto.Scalar.newBuilder()
+            .setDoubleValue(SmartProtobuf.getValueSafely(doubleValue, JavaType.DOUBLE))
+            .setFloatValue(SmartProtobuf.getValueSafely(floatValue, JavaType.FLOAT))
+            .setInt32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setInt64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setUint32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setUint64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setSint32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setSint64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setFixed32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setFixed64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setSfixed32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setSfixed64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setBoolValue(SmartProtobuf.getValueSafely(boolValue, JavaType.BOOLEAN))
+            .setStringValue(SmartProtobuf.getValueSafely(stringValue, JavaType.STRING))
+            .setBytesValue(SmartProtobuf.getValueSafely(byteStringValue, JavaType.BYTE_STRING))
+            .build();
+
+        /* THEN */
+        assertThat(scalar.getDoubleValue(), is(JavaType.DOUBLE.getDefaultValue()));
+        assertThat(scalar.getFloatValue(), is(JavaType.FLOAT.getDefaultValue()));
+        assertThat(scalar.getInt32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalar.getInt64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalar.getUint32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalar.getUint64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalar.getSint32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalar.getSint64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalar.getFixed32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalar.getFixed64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalar.getSfixed32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalar.getSfixed64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalar.getBoolValue(), is(JavaType.BOOLEAN.getDefaultValue()));
+        assertThat(scalar.getStringValue(), is(JavaType.STRING.getDefaultValue()));
+        assertThat(scalar.getBytesValue(), is(JavaType.BYTE_STRING.getDefaultValue()));
+    }
 }
