@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -15,7 +17,7 @@ public class SmartProtobufTest {
     public void setProtoField_scalarField_shouldBeSet() {
         /* GIVEN */
         double doubleValue = 0.12;
-        float  floatValue = 0.12f;
+        float floatValue = 0.12f;
         int int32Value = 32;
         long int64Value = 64;
         boolean boolValue = true;
@@ -63,10 +65,61 @@ public class SmartProtobufTest {
     }
 
     @Test
+    public void setProtoField_collectionField_shouldBeSet() {
+        /* GIVEN */
+        List<Double> doubleValues = Arrays.asList(0.1d, 0.2d, 0.3d);
+        List<Float> floatValues = Arrays.asList(0.1f, 0.2f, 0.3f);
+        List<Integer> int32Values = Arrays.asList(1, 2, 3);
+        List<Long> int64Values = Arrays.asList(1L, 2L, 3L);
+        List<Boolean> boolValues = Arrays.asList(true, false, true);
+        List<String> stringValues = Arrays.asList("One", "Two", "Three");
+        List<ByteString> bytesValues = Arrays.asList(ByteString.copyFromUtf8(stringValues.get(0)),
+            ByteString.copyFromUtf8(stringValues.get(1)), ByteString.copyFromUtf8(stringValues.get(2)));
+
+        ExampleProto.Collection.Builder collectionBuilder = ExampleProto.Collection.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProtoField(collectionBuilder::addAllDoubleValues, doubleValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFloatValues, floatValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllInt32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllInt64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllUint32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllUint64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSint32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSint64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFixed32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFixed64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSfixed32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSfixed64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllBoolValues, boolValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllStringValues, stringValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllBytesValues, bytesValues);
+
+        ExampleProto.Collection collection = collectionBuilder.build();
+
+        /* THEN */
+        assertThat(collection.getDoubleValuesList(), is(doubleValues));
+        assertThat(collection.getFloatValuesList(), is(floatValues));
+        assertThat(collection.getInt32ValuesList(), is(int32Values));
+        assertThat(collection.getInt64ValuesList(), is(int64Values));
+        assertThat(collection.getUint32ValuesList(), is(int32Values));
+        assertThat(collection.getUint64ValuesList(), is(int64Values));
+        assertThat(collection.getSint32ValuesList(), is(int32Values));
+        assertThat(collection.getSint64ValuesList(), is(int64Values));
+        assertThat(collection.getFixed32ValuesList(), is(int32Values));
+        assertThat(collection.getFixed64ValuesList(), is(int64Values));
+        assertThat(collection.getSfixed32ValuesList(), is(int32Values));
+        assertThat(collection.getSfixed64ValuesList(), is(int64Values));
+        assertThat(collection.getBoolValuesList(), is(boolValues));
+        assertThat(collection.getStringValuesList(), is(stringValues));
+        assertThat(collection.getBytesValuesList(), is(bytesValues));
+    }
+
+    @Test
     public void getValueSafely_scalarNullValue_shouldBeSetDefaultValue() {
         /* GIVEN */
         Double doubleValue = null;
-        Float  floatValue = null;
+        Float floatValue = null;
         Integer int32Value = null;
         Long int64Value = null;
         Boolean boolValue = null;
