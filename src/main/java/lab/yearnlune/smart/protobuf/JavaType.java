@@ -15,11 +15,10 @@ public enum JavaType {
 
     INTEGER(Integer.class.getSimpleName(), 0),
     LONG(Long.class.getSimpleName(), 0L),
-    DOUBLE(Double.class.getSimpleName(), Double.NaN),
-    FLOAT(Float.class.getSimpleName(), Float.NaN),
+    DOUBLE(Double.class.getSimpleName(), 0.0d),
+    FLOAT(Float.class.getSimpleName(), 0.0f),
     BOOLEAN(Boolean.class.getSimpleName(), false),
-    BYTE_STRING(ByteString.class.getSimpleName(), ByteString.copyFromUtf8("")),
-    BYTES(Byte[].class.getSimpleName(), new Byte[0]),
+    BYTES(ByteString.class.getSimpleName(), ByteString.copyFromUtf8("")),
     STRING(String.class.getSimpleName(), "");
 
     private static final Map<String, JavaType> ENTRIES = Arrays.stream(JavaType.values())
