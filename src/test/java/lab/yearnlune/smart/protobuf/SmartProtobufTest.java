@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -163,6 +164,56 @@ public class SmartProtobufTest {
         assertThat(collection.getBoolValuesList(), is(boolValues));
         assertThat(collection.getStringValuesList(), is(stringValues));
         assertThat(collection.getBytesValuesList(), is(bytesValues));
+    }
+
+    @Test
+    public void setProtoField_nullCollectionField_shouldBeSetDefaultValueLikeEmptyList() {
+        /* GIVEN */
+        List<Double> doubleValues = null;
+        List<Float> floatValues = null;
+        List<Integer> int32Values =null;
+        List<Long> int64Values = null;
+        List<Boolean> boolValues = null;
+        List<String> stringValues =null;
+        List<ByteString> bytesValues = null;
+
+        ExampleProto.Collection.Builder collectionBuilder = ExampleProto.Collection.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProtoField(collectionBuilder::addAllDoubleValues, doubleValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFloatValues, floatValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllInt32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllInt64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllUint32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllUint64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSint32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSint64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFixed32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllFixed64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSfixed32Values, int32Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllSfixed64Values, int64Values);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllBoolValues, boolValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllStringValues, stringValues);
+        SmartProtobuf.setProtoField(collectionBuilder::addAllBytesValues, bytesValues);
+
+        ExampleProto.Collection collection = collectionBuilder.build();
+
+        /* THEN */
+        assertThat(collection.getDoubleValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getFloatValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getInt32ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getInt64ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getUint32ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getUint64ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getSint32ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getSint64ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getFixed32ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getFixed64ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getSfixed32ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getSfixed64ValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getBoolValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getStringValuesList(), is(Collections.emptyList()));
+        assertThat(collection.getBytesValuesList(), is(Collections.emptyList()));
     }
 
     @Test
