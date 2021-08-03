@@ -217,6 +217,53 @@ public class SmartProtobufTest {
     }
 
     @Test
+    public void setProtoField_objectField_shouldBeSet() {
+        /* GIVEN */
+        ExampleProto.Scalar scalar = ExampleProto.Scalar.getDefaultInstance();
+        ExampleProto.Collection collection = ExampleProto.Collection.getDefaultInstance();
+        ExampleProto.Object.NestedObject nestedObject = ExampleProto.Object.NestedObject.getDefaultInstance();
+
+        ExampleProto.Object.Builder objectBuilder = ExampleProto.Object.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProtoField(objectBuilder::setScalar, scalar);
+        SmartProtobuf.setProtoField(objectBuilder::setCollection, collection);
+        SmartProtobuf.setProtoField(objectBuilder::setNestedObject, nestedObject);
+
+        ExampleProto.Object object = objectBuilder.build();
+
+        /* THEN */
+        assertThat(object.getScalar(), is(scalar));
+        assertThat(object.getCollection(), is(collection));
+        assertThat(object.getNestedObject(), is(nestedObject));
+    }
+
+    @Test
+    public void setProtoField_objectField_shouldBeSetDefaultValue() {
+        /* GIVEN */
+        ExampleProto.Scalar scalar = null;
+        ExampleProto.Collection collection = null;
+        ExampleProto.Object.NestedObject nestedObject = null;
+
+        ExampleProto.Object.Builder objectBuilder = ExampleProto.Object.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProtoField(objectBuilder::setScalar, scalar);
+        SmartProtobuf.setProtoField(objectBuilder::setCollection, collection);
+        SmartProtobuf.setProtoField(objectBuilder::setNestedObject, nestedObject);
+
+        ExampleProto.Object object = objectBuilder.build();
+
+        /* THEN */
+        assertThat(object.getScalar(), is(ExampleProto.Scalar.getDefaultInstance()));
+        assertThat(object.getCollection(), is(ExampleProto.Collection.getDefaultInstance()));
+        assertThat(object.getNestedObject(), is(ExampleProto.Object.NestedObject.getDefaultInstance()));
+
+        System.out.println("object.getScalar(): " + object.getScalar());
+        System.out.println("object.getScalar(): " + ExampleProto.Scalar.getDefaultInstance());
+    }
+
+    @Test
     public void getValueSafely_scalarNullValue_shouldBeSetDefaultValue() {
         /* GIVEN */
         Double doubleValue = null;
