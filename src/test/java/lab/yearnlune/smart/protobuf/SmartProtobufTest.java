@@ -239,7 +239,7 @@ public class SmartProtobufTest {
     }
 
     @Test
-    public void setProtoField_objectField_shouldBeSetDefaultValue() {
+    public void setProtoField_nullObjectField_shouldBeSetDefaultValue() {
         /* GIVEN */
         ExampleProto.Scalar scalar = null;
         ExampleProto.Collection collection = null;
