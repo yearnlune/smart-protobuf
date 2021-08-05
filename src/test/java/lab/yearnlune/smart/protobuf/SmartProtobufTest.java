@@ -261,7 +261,56 @@ public class SmartProtobufTest {
     }
 
     @Test
-    public void getValueSafely_scalarNullValue_shouldBeSetDefaultValue() {
+    public void getValueSafely_scalarValue_shouldBeGet() {
+        /* GIVEN */
+        double doubleValue = 0.12d;
+        float floatValue = 0.12f;
+        int int32Value = 32;
+        long int64Value = 64L;
+        boolean boolValue = true;
+        String stringValue = "string";
+        byte[] bytes = stringValue.getBytes(StandardCharsets.UTF_8);
+        ByteString bytesValue = ByteString.copyFrom(bytes);
+
+        /* WHEN */
+        ExampleProto.Scalar scalar = ExampleProto.Scalar.newBuilder()
+            .setDoubleValue(SmartProtobuf.getValueSafely(doubleValue, JavaType.DOUBLE))
+            .setFloatValue(SmartProtobuf.getValueSafely(floatValue, JavaType.FLOAT))
+            .setInt32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setInt64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setUint32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setUint64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setSint32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setSint64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setFixed32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setFixed64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setSfixed32Value(SmartProtobuf.getValueSafely(int32Value, JavaType.INTEGER))
+            .setSfixed64Value(SmartProtobuf.getValueSafely(int64Value, JavaType.LONG))
+            .setBoolValue(SmartProtobuf.getValueSafely(boolValue, JavaType.BOOLEAN))
+            .setStringValue(SmartProtobuf.getValueSafely(stringValue, JavaType.STRING))
+            .setBytesValue(SmartProtobuf.getValueSafely(bytesValue, JavaType.BYTES))
+            .build();
+
+        /* THEN */
+        assertThat(scalar.getDoubleValue(), is(doubleValue));
+        assertThat(scalar.getFloatValue(), is(floatValue));
+        assertThat(scalar.getInt32Value(), is(int32Value));
+        assertThat(scalar.getInt64Value(), is(int64Value));
+        assertThat(scalar.getUint32Value(), is(int32Value));
+        assertThat(scalar.getUint64Value(), is(int64Value));
+        assertThat(scalar.getSint32Value(), is(int32Value));
+        assertThat(scalar.getSint64Value(), is(int64Value));
+        assertThat(scalar.getFixed32Value(), is(int32Value));
+        assertThat(scalar.getFixed64Value(), is(int64Value));
+        assertThat(scalar.getSfixed32Value(), is(int32Value));
+        assertThat(scalar.getSfixed64Value(), is(int64Value));
+        assertThat(scalar.getBoolValue(), is(boolValue));
+        assertThat(scalar.getStringValue(), is(stringValue));
+        assertThat(scalar.getBytesValue(), is(bytesValue));
+    }
+
+    @Test
+    public void getValueSafely_scalarNullValue_shouldBeGetDefaultValue() {
         /* GIVEN */
         Double doubleValue = null;
         Float floatValue = null;
@@ -309,7 +358,56 @@ public class SmartProtobufTest {
     }
 
     @Test
-    public void getValueSafely_nullCollectionField_shouldBeSetDefaultValueLikeEmptyList() {
+    public void getValueSafely_collectionValue_shouldBeGet() {
+        /* GIVEN */
+        List<Double> doubleValues = Arrays.asList(0.1d, 0.2d, 0.3d);
+        List<Float> floatValues = Arrays.asList(0.1f, 0.2f, 0.3f);
+        List<Integer> int32Values = Arrays.asList(1, 2, 3);
+        List<Long> int64Values = Arrays.asList(1L, 2L, 3L);
+        List<Boolean> boolValues = Arrays.asList(true, false, true);
+        List<String> stringValues = Arrays.asList("One", "Two", "Three");
+        List<ByteString> bytesValues = Arrays.asList(ByteString.copyFromUtf8(stringValues.get(0)),
+            ByteString.copyFromUtf8(stringValues.get(1)), ByteString.copyFromUtf8(stringValues.get(2)));
+
+        /* WHEN */
+        ExampleProto.Collection collection = ExampleProto.Collection.newBuilder()
+            .addAllDoubleValues(SmartProtobuf.getValueSafely(doubleValues))
+            .addAllFloatValues(SmartProtobuf.getValueSafely(floatValues))
+            .addAllInt32Values(SmartProtobuf.getValueSafely(int32Values))
+            .addAllInt64Values(SmartProtobuf.getValueSafely(int64Values))
+            .addAllUint32Values(SmartProtobuf.getValueSafely(int32Values))
+            .addAllUint64Values(SmartProtobuf.getValueSafely(int64Values))
+            .addAllSint32Values(SmartProtobuf.getValueSafely(int32Values))
+            .addAllSint64Values(SmartProtobuf.getValueSafely(int64Values))
+            .addAllFixed32Values(SmartProtobuf.getValueSafely(int32Values))
+            .addAllFixed64Values(SmartProtobuf.getValueSafely(int64Values))
+            .addAllSfixed32Values(SmartProtobuf.getValueSafely(int32Values))
+            .addAllSfixed64Values(SmartProtobuf.getValueSafely(int64Values))
+            .addAllBoolValues(SmartProtobuf.getValueSafely(boolValues))
+            .addAllStringValues(SmartProtobuf.getValueSafely(stringValues))
+            .addAllBytesValues(SmartProtobuf.getValueSafely(bytesValues))
+            .build();
+
+        /* THEN */
+        assertThat(collection.getDoubleValuesList(), is(doubleValues));
+        assertThat(collection.getFloatValuesList(), is(floatValues));
+        assertThat(collection.getInt32ValuesList(), is(int32Values));
+        assertThat(collection.getInt64ValuesList(), is(int64Values));
+        assertThat(collection.getUint32ValuesList(), is(int32Values));
+        assertThat(collection.getUint64ValuesList(), is(int64Values));
+        assertThat(collection.getSint32ValuesList(), is(int32Values));
+        assertThat(collection.getSint64ValuesList(), is(int64Values));
+        assertThat(collection.getFixed32ValuesList(), is(int32Values));
+        assertThat(collection.getFixed64ValuesList(), is(int64Values));
+        assertThat(collection.getSfixed32ValuesList(), is(int32Values));
+        assertThat(collection.getSfixed64ValuesList(), is(int64Values));
+        assertThat(collection.getBoolValuesList(), is(boolValues));
+        assertThat(collection.getStringValuesList(), is(stringValues));
+        assertThat(collection.getBytesValuesList(), is(bytesValues));
+    }
+
+    @Test
+    public void getValueSafely_nullCollectionField_shouldBeGetDefaultValueLikeEmptyList() {
         /* GIVEN */
         List<Double> doubleValues = null;
         List<Float> floatValues = null;
