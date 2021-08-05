@@ -1,6 +1,7 @@
 package lab.yearnlune.smart.protobuf;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -39,6 +40,22 @@ public class SmartProtobuf {
             safeValue = value;
         }
         return safeValue;
+    }
+
+    /**
+     * get safety(Not null) value
+     *
+     * @param values collection value
+     * @param <T> value type
+     * @return value, empty list if the value is null
+     */
+    public static <T> List<T> getValueSafely(List<T> values) {
+        List<T> safeValues = Collections.emptyList();
+        if (values != null && !values.isEmpty()) {
+            safeValues = values;
+        }
+
+        return safeValues;
     }
 
     public static <P extends GeneratedMessageV3.Builder, T> void setProto(P protoBuilder, T object) {
