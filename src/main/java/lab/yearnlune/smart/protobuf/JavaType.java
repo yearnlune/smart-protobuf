@@ -13,13 +13,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum JavaType {
 
-    INTEGER(Integer.class.getSimpleName(), 0),
-    LONG(Long.class.getSimpleName(), 0L),
-    DOUBLE(Double.class.getSimpleName(), 0.0d),
-    FLOAT(Float.class.getSimpleName(), 0.0f),
-    BOOLEAN(Boolean.class.getSimpleName(), false),
-    BYTES(ByteString.class.getSimpleName(), ByteString.copyFromUtf8("")),
-    STRING(String.class.getSimpleName(), "");
+    INTEGER(Integer.class.getSimpleName().toLowerCase(), 0),
+    LONG(Long.class.getSimpleName().toLowerCase(), 0L),
+    DOUBLE(Double.class.getSimpleName().toLowerCase(), 0.0d),
+    FLOAT(Float.class.getSimpleName().toLowerCase(), 0.0f),
+    BOOLEAN(Boolean.class.getSimpleName().toLowerCase(), false),
+    BYTES(ByteString.class.getSimpleName().toLowerCase(), ByteString.copyFromUtf8("")),
+    STRING(String.class.getSimpleName().toLowerCase(), "");
 
     private static final Map<String, JavaType> ENTRIES = Arrays.stream(JavaType.values())
         .collect(Collectors.toMap(JavaType::getName, v -> v));
@@ -27,13 +27,17 @@ public enum JavaType {
     private String name;
     private Object defaultValue;
 
-    private static JavaType forName(String value) {
-        return ENTRIES.get(value);
+    public static JavaType forName(String value) {
+        return ENTRIES.get(value.toLowerCase());
     }
 
-    private static <T> JavaType forValue(T value) {
-        Class tClass = value.getClass();
-        String simpleName = tClass.getSimpleName();
+    public static <T> JavaType forValue(T value) {
+        if (value == null) {
+            return null;
+        }
+
+        Class<?> tClass = value.getClass();
+        String simpleName = tClass.getSimpleName().toLowerCase();
         return ENTRIES.get(simpleName);
     }
 }
