@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessageV3;
 
@@ -60,26 +61,41 @@ public class SmartProtobuf {
 
     public static <P extends GeneratedMessageV3.Builder, T> void setProto(P protoBuilder, T object) {
         Descriptors.Descriptor descriptor = protoBuilder.getDescriptorForType();
-
         List<Descriptors.FieldDescriptor> protoFields = descriptor.getFields();
 
         Field[] fields = object.getClass().getDeclaredFields();
         Map<String, Object> map = Stream.of(fields)
-            .collect(Collectors.toMap(Field::getName, v -> {
-                try {
-                    v.setAccessible(true);
-                    return v.get(object);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }));
+            .filter(field -> getValue(field, object) != null)
+            .collect(Collectors.toMap(Field::getName, field -> getValue(field, object)));
 
         for (Descriptors.FieldDescriptor protoField : protoFields) {
             Object value = map.get(protoField.getName());
             if (value != null) {
+                if (protoField.getType().toString().equals("BYTES") && !isByteString(value)) {
+                    if (value instanceof byte[]) {
+                        value = ByteString.copyFrom((byte[])value);
+                    } else {
+                        continue;
+                    }
+                }
+
                 protoBuilder.setField(protoField, value);
             }
         }
+    }
+
+    private static <T> Object getValue(Field field, T t) {
+        Object value = null;
+        try {
+            field.setAccessible(true);
+            value = field.get(t);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    private static boolean isByteString(Object bytes) {
+        return bytes.getClass().getTypeName().equals(ByteString.class.getTypeName());
     }
 }

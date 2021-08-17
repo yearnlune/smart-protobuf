@@ -12,6 +12,9 @@ import org.junit.Test;
 
 import com.google.protobuf.ByteString;
 
+import dto.Scalar;
+import dto.WrapperScalar;
+
 public class SmartProtobufTest {
 
     @Test
@@ -171,10 +174,10 @@ public class SmartProtobufTest {
         /* GIVEN */
         List<Double> doubleValues = null;
         List<Float> floatValues = null;
-        List<Integer> int32Values =null;
+        List<Integer> int32Values = null;
         List<Long> int64Values = null;
         List<Boolean> boolValues = null;
-        List<String> stringValues =null;
+        List<String> stringValues = null;
         List<ByteString> bytesValues = null;
 
         ExampleProto.Collection.Builder collectionBuilder = ExampleProto.Collection.newBuilder();
@@ -411,10 +414,10 @@ public class SmartProtobufTest {
         /* GIVEN */
         List<Double> doubleValues = null;
         List<Float> floatValues = null;
-        List<Integer> int32Values =null;
+        List<Integer> int32Values = null;
         List<Long> int64Values = null;
         List<Boolean> boolValues = null;
-        List<String> stringValues =null;
+        List<String> stringValues = null;
         List<ByteString> bytesValues = null;
 
         /* WHEN */
@@ -452,5 +455,80 @@ public class SmartProtobufTest {
         assertThat(collection.getBoolValuesList(), is(Collections.emptyList()));
         assertThat(collection.getStringValuesList(), is(Collections.emptyList()));
         assertThat(collection.getBytesValuesList(), is(Collections.emptyList()));
+    }
+
+    @Test
+    public void setProto_scalarValue_shouldBeSet() {
+        /* GIVEN */
+        Scalar scalar = Scalar.builder()
+            .doubleValue(0.12d)
+            .floatValue(0.12f)
+            .int32Value(32)
+            .int64Value(64)
+            .uint32Value(132)
+            .uint64Value(164)
+            .sint32Value(232)
+            .sint64Value(264)
+            .fixed32Value(332)
+            .fixed64Value(364)
+            .sfixed32Value(432)
+            .sfixed64Value(464)
+            .boolValue(true)
+            .stringValue("string")
+            .bytesValue("bytes".getBytes(StandardCharsets.UTF_8))
+            .build();
+
+        ExampleProto.Scalar.Builder scalarProtoBuilder = ExampleProto.Scalar.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProto(scalarProtoBuilder, scalar);
+        ExampleProto.Scalar scalarProto = scalarProtoBuilder.build();
+
+        /* THEN */
+        assertThat(scalarProto.getDoubleValue(), is(scalar.getDoubleValue()));
+        assertThat(scalarProto.getFloatValue(), is(scalar.getFloatValue()));
+        assertThat(scalarProto.getInt32Value(), is(scalar.getInt32Value()));
+        assertThat(scalarProto.getInt64Value(), is(scalar.getInt64Value()));
+        assertThat(scalarProto.getUint32Value(), is(scalar.getUint32Value()));
+        assertThat(scalarProto.getUint64Value(), is(scalar.getUint64Value()));
+        assertThat(scalarProto.getSint32Value(), is(scalar.getSint32Value()));
+        assertThat(scalarProto.getSint64Value(), is(scalar.getSint64Value()));
+        assertThat(scalarProto.getFixed32Value(), is(scalar.getFixed32Value()));
+        assertThat(scalarProto.getFixed64Value(), is(scalar.getFixed64Value()));
+        assertThat(scalarProto.getSfixed32Value(), is(scalar.getSfixed32Value()));
+        assertThat(scalarProto.getSfixed64Value(), is(scalar.getSfixed64Value()));
+        assertThat(scalarProto.getBoolValue(), is(scalar.isBoolValue()));
+        assertThat(scalarProto.getStringValue(), is(scalar.getStringValue()));
+        assertThat(scalarProto.getBytesValue(), is(ByteString.copyFrom(scalar.getBytesValue())));
+    }
+
+    @Test
+    public void setProto_nullScalarField_shouldBeSetDefaultValue() {
+        /* GIVEN */
+        WrapperScalar scalar = WrapperScalar.builder()
+            .build();
+
+        ExampleProto.Scalar.Builder scalarProtoBuilder = ExampleProto.Scalar.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProto(scalarProtoBuilder, scalar);
+        ExampleProto.Scalar scalarProto = scalarProtoBuilder.build();
+
+        /* THEN */
+        assertThat(scalarProto.getDoubleValue(), is(JavaType.DOUBLE.getDefaultValue()));
+        assertThat(scalarProto.getFloatValue(), is(JavaType.FLOAT.getDefaultValue()));
+        assertThat(scalarProto.getInt32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalarProto.getInt64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalarProto.getUint32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalarProto.getUint64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalarProto.getSint32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalarProto.getSint64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalarProto.getFixed32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalarProto.getFixed64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalarProto.getSfixed32Value(), is(JavaType.INTEGER.getDefaultValue()));
+        assertThat(scalarProto.getSfixed64Value(), is(JavaType.LONG.getDefaultValue()));
+        assertThat(scalarProto.getBoolValue(), is(JavaType.BOOLEAN.getDefaultValue()));
+        assertThat(scalarProto.getStringValue(), is(JavaType.STRING.getDefaultValue()));
+        assertThat(scalarProto.getBytesValue(), is(JavaType.BYTES.getDefaultValue()));
     }
 }
