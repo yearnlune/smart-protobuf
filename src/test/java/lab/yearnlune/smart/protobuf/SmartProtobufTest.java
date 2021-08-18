@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.google.protobuf.ByteString;
 
+import dto.Collection;
 import dto.Scalar;
 import dto.WrapperScalar;
 
@@ -530,5 +531,57 @@ public class SmartProtobufTest {
         assertThat(scalarProto.getBoolValue(), is(JavaType.BOOLEAN.getDefaultValue()));
         assertThat(scalarProto.getStringValue(), is(JavaType.STRING.getDefaultValue()));
         assertThat(scalarProto.getBytesValue(), is(JavaType.BYTES.getDefaultValue()));
+    }
+
+    @Test
+    public void setProto_collectionValue_shouldBeSet() {
+        /* GIVEN */
+        Collection collection = Collection.builder()
+            .doubleValues(Arrays.asList(0.1d, 0.2d, 0.3d))
+            .floatValues(Arrays.asList(0.1f, 0.2f, 0.3f))
+            .int32Values(Arrays.asList(1, 2, 3))
+            .int64Values(Arrays.asList(1L, 2L, 3L))
+            .uint32Values(Arrays.asList(1, 2, 3))
+            .uint64Values(Arrays.asList(1L, 2L, 3L))
+            .sint32Values(Arrays.asList(1, 2, 3))
+            .sint64Values(Arrays.asList(1L, 2L, 3L))
+            .fixed32Values(Arrays.asList(1, 2, 3))
+            .fixed64Values(Arrays.asList(1L, 2L, 3L))
+            .sfixed32Values(Arrays.asList(1, 2, 3))
+            .sfixed64Values(Arrays.asList(1L, 2L, 3L))
+            .boolValues(Arrays.asList(true, false, true))
+            .stringValues(Arrays.asList("One", "Two", "Three"))
+            .bytesValues(Arrays.asList(
+                "One".getBytes(StandardCharsets.UTF_8),
+                "Two".getBytes(StandardCharsets.UTF_8),
+                "Three".getBytes(StandardCharsets.UTF_8)))
+            .build();
+
+        List<ByteString> byteStringValues = Arrays.asList(ByteString.copyFrom("One".getBytes(StandardCharsets.UTF_8)),
+            ByteString.copyFrom("Two".getBytes(StandardCharsets.UTF_8)),
+            ByteString.copyFrom("Three".getBytes(StandardCharsets.UTF_8)));
+
+        ExampleProto.Collection.Builder collectionBuilder = ExampleProto.Collection.newBuilder();
+
+        /* WHEN */
+        SmartProtobuf.setProto(collectionBuilder, collection);
+        ExampleProto.Collection collectionProto = collectionBuilder.build();
+
+        /* THEN */
+        assertThat(collectionProto.getDoubleValuesList(), is(collection.getDoubleValues()));
+        assertThat(collectionProto.getFloatValuesList(), is(collection.getFloatValues()));
+        assertThat(collectionProto.getInt32ValuesList(), is(collection.getInt32Values()));
+        assertThat(collectionProto.getInt64ValuesList(), is(collection.getInt64Values()));
+        assertThat(collectionProto.getUint32ValuesList(), is(collection.getUint32Values()));
+        assertThat(collectionProto.getUint64ValuesList(), is(collection.getUint64Values()));
+        assertThat(collectionProto.getSint32ValuesList(), is(collection.getSint32Values()));
+        assertThat(collectionProto.getSint64ValuesList(), is(collection.getSint64Values()));
+        assertThat(collectionProto.getFixed32ValuesList(), is(collection.getFixed32Values()));
+        assertThat(collectionProto.getFixed64ValuesList(), is(collection.getFixed64Values()));
+        assertThat(collectionProto.getSfixed32ValuesList(), is(collection.getSfixed32Values()));
+        assertThat(collectionProto.getSfixed64ValuesList(), is(collection.getSfixed64Values()));
+        assertThat(collectionProto.getBoolValuesList(), is(collection.getBoolValues()));
+        assertThat(collectionProto.getStringValuesList(), is(collection.getStringValues()));
+        assertThat(collectionProto.getBytesValuesList(), is(byteStringValues));
     }
 }

@@ -72,8 +72,10 @@ public class SmartProtobuf {
             Object value = map.get(protoField.getName());
             if (value != null) {
                 if (protoField.getType().toString().equals("BYTES") && !isByteString(value)) {
-                    if (value instanceof byte[]) {
+                    if (isByteArray(value)) {
                         value = ByteString.copyFrom((byte[])value);
+                    } else if (isBytesList(value)) {
+                        value = changeBytesListIntoByteStringList((List<byte[]>)value);
                     } else {
                         continue;
                     }
@@ -97,5 +99,22 @@ public class SmartProtobuf {
 
     private static boolean isByteString(Object bytes) {
         return bytes.getClass().getTypeName().equals(ByteString.class.getTypeName());
+    }
+
+    private static boolean isByteArray(Object bytes) {
+        return bytes.getClass().isArray() && bytes instanceof byte[];
+    }
+
+    private static boolean isBytesList(Object bytes) {
+        if (!bytes.getClass().isArray() && bytes instanceof List) {
+            List<?> list = (List<?>)bytes;
+            return !list.isEmpty() && isByteArray(list.get(0));
+        }
+
+        return false;
+    }
+
+    private static List<ByteString> changeBytesListIntoByteStringList(List<byte[]> bytesList) {
+        return bytesList.stream().map(ByteString::copyFrom).collect(Collectors.toList());
     }
 }
