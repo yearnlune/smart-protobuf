@@ -59,6 +59,12 @@ public class SmartProtobuf {
         return safeValues;
     }
 
+	/**
+	 * Set proto with object
+	 *
+	 * @param protoBuilder target proto class builder
+	 * @param object source object
+	 */
     public static <P extends GeneratedMessageV3.Builder, T> void setProto(P protoBuilder, T object) {
         Descriptors.Descriptor descriptor = protoBuilder.getDescriptorForType();
         List<Descriptors.FieldDescriptor> protoFields = descriptor.getFields();
